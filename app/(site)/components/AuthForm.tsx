@@ -6,6 +6,7 @@ import Input from "../../components/inputs/Input";
 import Button from "../../components/Button";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import axios from "axios";
 
 type Variant = 'LOGIN' | 'REGISTER';
 
@@ -21,12 +22,9 @@ const AuthForm = () => {
         }
     }, [variant]);
 
-    const {
-        register,
-        handleSubmit,
-        formState: {
-            errors,
-        }
+    const { register, handleSubmit, formState: {
+        errors,
+    }
     } = useForm<FieldValues>({
         defaultValues: {
             name: '',
@@ -38,9 +36,8 @@ const AuthForm = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
         if (variant === 'REGISTER') {
-            // Axio
+            axios.post('/api/register', data)
         } else if (variant === 'LOGIN') {
-            // Axio
         }
     }
 
@@ -54,10 +51,10 @@ const AuthForm = () => {
             <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     {variant === 'REGISTER' && (
-                        <Input id="name" label="Name" register={register} errors={errors} />
+                        <Input id="name" label="Name" register={register} errors={errors} disabled={isLoading} />
                     )}
-                    <Input id="email" label="Email Address" type="email" register={register} errors={errors} />
-                    <Input id="password" label="Password" type="password" register={register} errors={errors} />
+                    <Input id="email" label="Email Address" type="email" register={register} errors={errors} disabled={isLoading} />
+                    <Input id="password" label="Password" type="password" register={register} errors={errors} disabled={isLoading} />
                     <div>
                         <Button disable={isLoading} fullWidth type="submit" >
                             {variant === 'REGISTER' ? 'Register' : 'Sign in'}
